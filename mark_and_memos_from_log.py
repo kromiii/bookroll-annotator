@@ -5,7 +5,12 @@ import numpy as np
 # %%
 def extract_mark_and_memo():
     csv = pd.read_csv("logdata/eventstream.csv")
-    ##取り除くイベント名一覧
+    students = pd.read_csv("logdata/studentscore.csv")
+    ## 高成績者のログを抽出
+    highscore_students = students[students.score >= students.score.mean()]
+    csv = csv.query("ssokid in list(@highscore_students.userid)")
+
+    ## 取り除くイベント名一覧
     rem = ["LINK_CLICK","NEXT","OPEN","CLOSE","QUIZ_ANSWER_CORRECT","TIMER_PAUSE",
         "PAGE_JUMP","BOOKMARK_JUMP","DELETE BOOKMARK","CLOSE_RECOMMENDATION",
         "PREV","OPEN_RECOMMENDATION","REGIST CONTENTS","ADD BOOKMARK",
