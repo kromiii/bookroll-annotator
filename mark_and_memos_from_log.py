@@ -67,7 +67,10 @@ def extract_mark_and_memo():
     memos["text"] = memos.text.str.replace(";:::nl:::;", " ")
     memos = memos[memos.text.notnull()]
 
+    timespent = csv.query("diftime > 3 & diftime < 20*60").groupby(["contentsname", "page_no"]).sum()["diftime"].reset_index()
+
     marks.to_csv("temp/output_csv/marks.csv",index=False)
     memos.to_csv("temp/output_csv/memos.csv",index=False)
+    timespent.to_csv("temp/output_csv/timespent.csv", index=False)
 
     print("extracted information from logs.")

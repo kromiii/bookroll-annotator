@@ -107,6 +107,13 @@ def add_markers(im_new, siz, marks, marks0):
         draw.rectangle((xst, yst, xsiz+xst, ysiz+yst), fill=(col0[0],col0[1],col0[2],12)) # 128
         im_new = Image.alpha_composite(im_new,rect)
     return im_new
+
+def add_timespent(im_new, siz, font_memo_n, fontsize):
+    xpos = 10
+    ypos = 10
+    text0 = "★高成績者の滞在時間が多いページです！"
+    im_new = add_text_to_image(im_new, text0, font_memo_n, fontsize, (0,0,0), xpos, ypos, siz[0])
+    return im_new
 # %%
 def annotate_pdf():
     #PDFs : 元となるPDFのパス，PDFのファイル名は，marks,memosのファイル名と同じ
@@ -119,6 +126,7 @@ def annotate_pdf():
     pdfs = glob.glob("pdfs/*.pdf")
     marks = pd.read_csv("temp/output_csv/marks.csv")
     memos = pd.read_csv("temp/output_csv/memos.csv")
+    timespent = pd.read_csv("temp/output_csv/timespent.csv")
     font_memo_n = "/usr/share/fonts/truetype/takao-gothic/TakaoGothic.ttf"
     fontsize=35
     root_fol = "temp/imgs/"
@@ -142,12 +150,15 @@ def annotate_pdf():
     for fna in pdfnames: # 教材ループ
         if not os.path.exists(root_fol+fna): os.mkdir(root_fol+fna)
         fna0 = daku(fna) ###名前の，濁音，半濁点の調整．
+        timespent0 = timespent[(timespent.contentsname==fna0)].copy()
+        timespent0["rank"] = timespent0.rank(ascending=False)["diftime"]
         for pno in range(len(imgs[fna])): # ページループ
             pi+=1
             print(fna, "p.", pno)
             siz = imgs[fna][pno].size
             # 画像を引き伸ばし
-            im_new = scale_image(imgs[fna][pno], siz)
+            #im_new = scale_image(imgs[fna][pno], siz)
+            im_new = imgs[fna][pno].convert('RGBA')
             siz_new = im_new.size
         #    imshow(im_new)
         #    imshow()
@@ -155,9 +166,13 @@ def annotate_pdf():
             marks0 = marks[(marks.contentsname==fna0) & (marks.page_no==pno+1)]
             print("画像サイズ:", siz, "memoの数:", len(memos0), "markerの数:", len(marks0))
             # メモの追加
-            im_new = add_memos(im_new, siz, memos, memos0, font_memo_n, fontsize)
+            #im_new = add_memos(im_new, siz, memos, memos0, font_memo_n, fontsize)
             # マーカーの追加
             im_new = add_markers(im_new, siz, marks, marks0)
+            # 滞在時間時間の多かったページかどうか
+            if len(timespent0[timespent0.page_no == pno + 1]) != 0:
+                if timespent0[timespent0.page_no == pno + 1]["rank"].iloc[0] <= 5:
+                    im_new = add_timespent(im_new, siz, font_memo_n, fontsize)
             # 画像を temp/imgs に保存（PDFにする関係でalpha チャンネルを削除）
             im_new.resize((int(siz_new[0]/2),int(siz_new[1]/2))).convert("RGB").save(root_fol+fna+"/"+str(pno)+".jpg")
     # %%
