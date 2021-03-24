@@ -2,8 +2,13 @@ __pycache__
 .ipynb_checkpoints
 .vscode
 logdata/*
+!logdata/eventstream_sample.csv
 imgs/*
+!imgs/.keep
 output_csv/*
+!output_csv/.keep
 output_pdfs/*
+!output_pdfs/.keep
 pdfs/*
+!pdfs/.keep
 

@@ -14,7 +14,7 @@ Annotated PDF
 ## Get Started
 
 1. COPY PDF Files in `pdfs` directory.
-2. COPY BookRoll EventStream in `logdata` directory. 
+2. COPY BookRoll EventStream as `eventstream.csv` in `logdata` directory. 
 3. Install the libraries.
 4. Run `python main.py`
 
