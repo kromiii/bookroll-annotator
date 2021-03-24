@@ -62,7 +62,7 @@ def extract_mark_and_memo():
     memos["text"] = memos.text.str.replace(";:::nl:::;", " ")
     memos = memos[memos.text.notnull()]
 
-    marks.to_csv("output_csv/marks.csv",index=False)
-    memos.to_csv("output_csv/memos.csv",index=False)
+    marks.to_csv("temp/output_csv/marks.csv",index=False)
+    memos.to_csv("temp/output_csv/memos.csv",index=False)
 
     print("extracted information from logs.")

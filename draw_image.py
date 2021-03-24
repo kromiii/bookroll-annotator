@@ -20,11 +20,11 @@ def annotate_pdf():
     #root_dir : 出力フォルダ
 
     pdfs = glob.glob("pdfs/*.pdf")
-    marks = pd.read_csv("output_csv/marks.csv")
-    memos = pd.read_csv("output_csv/memos.csv")
+    marks = pd.read_csv("temp/output_csv/marks.csv")
+    memos = pd.read_csv("temp/output_csv/memos.csv")
     font_memo_n = "/usr/share/fonts/truetype/takao-gothic/TakaoGothic.ttf"
     fontsize=35
-    root_fol = "imgs/"
+    root_fol = "temp/imgs/"
     # %%
     ###関数群
 
@@ -123,8 +123,8 @@ def annotate_pdf():
         #        print(xpos,ypos, memos.at[i,"text"])
                 text0 = text_okuri(memos.at[i,"text"], words)
                 lines = len(text0.split("\n"))
-                im_new = add_text_to_image(im_new, "("+str(memo_n)+")", font_memo_n, 50,
-                                        (150, 0, 0), ypos, xpos, siz[0])
+        #        im_new = add_text_to_image(im_new, "("+str(memo_n)+")", font_memo_n, 50,
+        #                                (150, 0, 0), ypos, xpos, siz[0])
                 if siz[0]>siz[1]:
                     im_new = add_text_to_image(im_new, "("+str(memo_n)+") "+text0, font_memo_n, fontsize,
                                 (0, 0, 0), siz[1]+fontsize*memo_line+memo_n*4, 100, siz[0])

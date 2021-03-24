@@ -3,10 +3,10 @@ __pycache__
 .vscode
 logdata/*
 !logdata/eventstream_sample.csv
-imgs/*
-!imgs/.keep
-output_csv/*
-!output_csv/.keep
+temp/imgs/*
+!temp/imgs/.keep
+temp/output_csv/*
+!temp/output_csv/.keep
 output_pdfs/*
 !output_pdfs/.keep
 pdfs/*
