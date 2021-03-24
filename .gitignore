@@ -1,0 +1,9 @@
+__pycache__
+.ipynb_checkpoints
+.vscode
+data/*
+imgs/*
+output_csv/*
+output_pdfs/*
+pdfs/*
+
