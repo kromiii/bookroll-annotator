@@ -20,11 +20,11 @@ def annotate_pdf():
     #root_dir : 出力フォルダ
 
     pdfs = glob.glob("pdfs/*.pdf")
-    marks = pd.read_csv("output_csv/marks.csv")
-    memos = pd.read_csv("output_csv/memos.csv")
+    marks = pd.read_csv("temp/output_csv/marks.csv")
+    memos = pd.read_csv("temp/output_csv/memos.csv")
     font_memo_n = "/usr/share/fonts/truetype/takao-gothic/TakaoGothic.ttf"
     fontsize=35
-    root_fol = "imgs/"
+    root_fol = "temp/imgs/"
     # %%
     ###関数群
 
