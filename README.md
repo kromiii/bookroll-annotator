@@ -11,6 +11,12 @@ Annotated PDF
 
 ![annotated](docs/annotated_img.png)
 
+## Usage
+
+```
+python main.py [--score False]
+```
+
 ## Requirements
 + Python 3.6.9
 + Ubuntu 18.04
