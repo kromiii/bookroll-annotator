@@ -3,9 +3,15 @@ import pandas as pd
 import numpy as np
 
 # %%
-def extract_mark_and_memo():
+def extract_mark_and_memo(isscore):
     csv = pd.read_csv("logdata/eventstream.csv")
-    ##取り除くイベント名一覧
+    students = pd.read_csv("logdata/studentscore.csv")
+    if isscore:
+        ## 高成績者のログを抽出
+        highscore_students = students[students.score >= students.score.mean()]
+        csv_highscore = csv.query("ssokid in list(@highscore_students.userid)")
+
+    ## 取り除くイベント名一覧
     rem = ["LINK_CLICK","NEXT","OPEN","CLOSE","QUIZ_ANSWER_CORRECT","TIMER_PAUSE",
         "PAGE_JUMP","BOOKMARK_JUMP","DELETE BOOKMARK","CLOSE_RECOMMENDATION",
         "PREV","OPEN_RECOMMENDATION","REGIST CONTENTS","ADD BOOKMARK",
@@ -60,9 +66,17 @@ def extract_mark_and_memo():
     marks = marks[marks.operationname=="ADD MARKER"]
     memos = csv_memo.drop("text", axis=1).rename({"description": "desc", "memo_text": "text"}, axis=1)
     memos["text"] = memos.text.str.replace(";:::nl:::;", " ")
-    memos = memos[memos.text.notnull()]
+    memos = memos[memos.text.notnull()] 
+
+    if isscore:
+        timespent_all = csv.query("diftime > 3 & diftime < 20*60").groupby(["contentsname", "page_no"]).sum()["diftime"].reset_index()
+        timespent_highscore = csv_highscore.query("diftime > 3 & diftime < 20*60").groupby(["contentsname", "page_no"]).sum()["diftime"].reset_index()
+        timespent = timespent_highscore.merge(timespent_all, how="left", on=["contentsname", "page_no"])
+        timespent["diftime"] = timespent["diftime_x"] / timespent["diftime_y"]
+        timespent.to_csv("temp/output_csv/timespent.csv", index=False)
 
     marks.to_csv("temp/output_csv/marks.csv",index=False)
     memos.to_csv("temp/output_csv/memos.csv",index=False)
+
 
     print("extracted information from logs.")
