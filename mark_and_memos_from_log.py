@@ -8,7 +8,7 @@ def extract_mark_and_memo():
     students = pd.read_csv("logdata/studentscore.csv")
     ## 高成績者のログを抽出
     highscore_students = students[students.score >= students.score.mean()]
-    csv = csv.query("ssokid in list(@highscore_students.userid)")
+    csv_highscore = csv.query("ssokid in list(@highscore_students.userid)")
 
     ## 取り除くイベント名一覧
     rem = ["LINK_CLICK","NEXT","OPEN","CLOSE","QUIZ_ANSWER_CORRECT","TIMER_PAUSE",
@@ -67,7 +67,10 @@ def extract_mark_and_memo():
     memos["text"] = memos.text.str.replace(";:::nl:::;", " ")
     memos = memos[memos.text.notnull()]
 
-    timespent = csv.query("diftime > 3 & diftime < 20*60").groupby(["contentsname", "page_no"]).sum()["diftime"].reset_index()
+    timespent_all = csv.query("diftime > 3 & diftime < 20*60").groupby(["contentsname", "page_no"]).sum()["diftime"].reset_index()
+    timespent_highscore = csv_highscore.query("diftime > 3 & diftime < 20*60").groupby(["contentsname", "page_no"]).sum()["diftime"].reset_index()
+    timespent = timespent_highscore.merge(timespent_all, how="left", on=["contentsname", "page_no"])
+    timespent["diftime"] = timespent["diftime_x"] / timespent["diftime_y"]
 
     marks.to_csv("temp/output_csv/marks.csv",index=False)
     memos.to_csv("temp/output_csv/memos.csv",index=False)
