@@ -17,9 +17,10 @@ Annotated PDF
 python main.py [--score False]
 ```
 
-## Requirements
-+ Python 3.6.9
-+ Ubuntu 18.04
+## Required Packages
+pdf2image, pandas, numpy, PIL, img2pdf
+
+あと、ローカルにpoppler も必要
 
 ## Get Started
 

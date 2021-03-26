@@ -3,6 +3,7 @@ __pycache__
 .vscode
 logdata/*
 !logdata/eventstream_sample.csv
+!logdata/studentscore_sample.csv
 temp/imgs/*
 !temp/imgs/.keep
 temp/output_csv/*
