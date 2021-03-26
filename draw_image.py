@@ -11,6 +11,8 @@ import numpy as np
 from PIL import ImageFont, ImageDraw, Image
 import img2pdf
 
+from natsort import natsorted
+
 # %%
 ###関数群
 
@@ -189,4 +191,4 @@ def annotate_pdf(isscore):
         extension  = ".jpg" # 拡張子がJPGのものを対象
         with open(pdf_FileName,"wb") as f:
             # 画像フォルダの中にあるPNGファイルを取得し配列に追加、バイナリ形式でファイルに書き込む
-            f.write(img2pdf.convert([Image.open(png_Folder+j).filename for j in os.listdir(png_Folder) if j.endswith(extension)]))
+            f.write(img2pdf.convert([Image.open(png_Folder+j).filename for j in natsorted(os.listdir(png_Folder)) if j.endswith(extension)]))
